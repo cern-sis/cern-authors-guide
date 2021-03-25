@@ -1,4 +1,5 @@
 module.exports = {
+  pathPrefix: '/cern-authors-guide',
   plugins: [
     `gatsby-plugin-sass`,
     `gatsby-plugin-react-helmet`,

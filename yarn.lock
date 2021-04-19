@@ -11704,6 +11704,13 @@ react-albus@^2.0.0:
     hoist-non-react-statics "^2.3.1"
     prop-types "^15.5.8"
 
+react-bootstrap-icons@^1.4.0:
+  version "1.4.0"
+  resolved "https://registry.yarnpkg.com/react-bootstrap-icons/-/react-bootstrap-icons-1.4.0.tgz#01eb010fcbd467e58f2846cbc5cd83c32de47a9f"
+  integrity sha512-rxT8IxIU3Cnnj4y+rDJvlj5qITNfQP0jdw0e1gGCuyNDQDxvRvrA6QEFSLmWBgMqC/hig3CnZ+Snx2GwXbPxmQ==
+  dependencies:
+    prop-types "^15.7.2"
+
 react-bootstrap-typeahead@^5.1.4:
   version "5.1.4"
   resolved "https://registry.yarnpkg.com/react-bootstrap-typeahead/-/react-bootstrap-typeahead-5.1.4.tgz#856d30438bb7a254cfeafa3ec03ddf90285f7a4d"

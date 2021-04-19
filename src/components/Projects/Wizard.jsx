@@ -9,6 +9,7 @@ import 'react-bootstrap-typeahead/css/Typeahead.css';
 // import { TransitionGroup, CSSTransition } from 'react-transition-group';
 import { Wizard, Steps, Step } from 'react-albus';
 import { useStaticQuery, graphql } from 'gatsby';
+import { CheckCircleFill } from 'react-bootstrap-icons';
 import Navigation from './Navigation';
 import NavButton from './NavButton';
 
@@ -77,6 +78,8 @@ const WizardSection = () => {
   const onChange = (key, value) => {
     if (value && value.length && value.length > 0) {
       setContent({ ...content, ...{ [key]: value[0] } });
+    } else {
+      setContent({ ...content, ...{ [key]: null } });
     }
   };
 
@@ -120,7 +123,11 @@ const WizardSection = () => {
                       id="basic-typeahead-single"
                       size="lg"
                       labelKey={(option) => {
-                        return `${option.Name} (${option.Short_Name}), Publisher: ${option.Publisher}, ISSN Online: ${option.ISSN_web}, ISSN Print: ${option.ISSN_print}`;
+                        return `${option.Name}${
+                          option.Short_Name ? `(${option.Short_Name})` : ''
+                        }, Publisher: ${option.Publisher}${
+                          option.ISSN_web ? `, ISSN Online: ${option.ISSN_web}` : ''
+                        }${option.ISSN_print ? `, ISSN Print: ${option.ISSN_print}` : ''}`;
                       }}
                       onChange={(selected) => onChange('journal', selected)}
                       options={journals}
@@ -153,7 +160,7 @@ const WizardSection = () => {
                     (hep-ex, hep-lat, hep-ph, hep-th) before publication in the journal?
                   </h1>
                   <div>
-                    <NavButton variant="info" keyId="arxiv" title="Yes" />
+                    <NavButton variant="info" keyId="goAhead" title="Yes" />
                     <NavButton variant="info" keyId="cernAffiliation" title="No" />
                   </div>
                 </Step>
@@ -164,16 +171,23 @@ const WizardSection = () => {
                   </div>
                 </Step>
                 <Step id="goAhead">
-                  <h1 className="wizard-text text-align-center">
+                  <h1 style={{ margin: '0' }} className="wizard-text text-align-center">
                     Your article will be automatically covered by one of the CERN Open Access
                     agreements. You do not have to do anything special to benefit from the central
                     CERN support.
+                    <div>
+                      <CheckCircleFill style={{ margin: '20px' }} size={48} color="green" />
+                    </div>
                   </h1>
                 </Step>
                 <Step id="cernAffiliation">
                   <h1 className="wizard-text text-align-center">
                     Are you a CERN staff member or fellow or allowed to use the CERN affiliation (
-                    <a href="https://scientific-info.cern/practical-information/glossary/cern-author">
+                    <a
+                      target="_blank"
+                      href="https://scientific-info.cern/practical-information/glossary/cern-author"
+                      rel="noreferrer"
+                    >
                       see here
                     </a>
                     )?

@@ -8,10 +8,9 @@ import 'react-bootstrap-typeahead/css/Typeahead.css';
 // import { BrowserRouter, Route } from 'react-router-dom';
 // import { TransitionGroup, CSSTransition } from 'react-transition-group';
 import { Wizard, Steps, Step } from 'react-albus';
+import { useStaticQuery, graphql } from 'gatsby';
 import Navigation from './Navigation';
 import NavButton from './NavButton';
-
-const JOURNAL_OPTIONS = ['Journal 1', 'Journal 2', 'Journal 3', 'Journal 4'];
 
 const WizardSection = () => {
   // const [isDesktop, setIsDesktop] = useState(false);
@@ -26,21 +25,85 @@ const WizardSection = () => {
   // 		setIsDesktop(false);
   // 	}
   // }, []);
+  // let data = props && props.dassta && props.dssata.allJournalListAuthorToolXlsxSheet1.nodes;
+  // const journals = data && data.allJournalListAuthorToolXlsxSheet1 && data.allJournalListAuthorToolXlsxSheet1.nodes;
+  const data = useStaticQuery(
+    graphql`
+      query {
+        allJournalListAuthorToolXlsxSheet1 {
+          nodes {
+            Corresponding
+            id
+            Short_Name
+            SCOAP3
+            Publisher
+            Non_corresponding
+            Name
+            ISSN_web
+            ISSN_print
+            Experiment
+          }
+          totalCount
+        }
+      }
+    `
+  );
+  const journals =
+    data &&
+    data.allJournalListAuthorToolXlsxSheet1 &&
+    data.allJournalListAuthorToolXlsxSheet1.nodes;
+  journals.sort((a, b) => {
+    if (a.Name < b.Name) return -1;
+    if (a.Name > b.Name) return 1;
+    return 0;
+  });
+  // const journals = JOURNAL_OPTIONS;
 
-  const [data, setData] = useState({});
+  const [content, setContent] = useState({});
   const skip = ({ step, push }) => {
     switch (step.id) {
       case 'intro': {
-        if (data.journal === '-- Other --') push('contactUs');
-        else push();
+        if (content.journal === '-- Other --') push('contactUs');
+        else {
+          push();
+        }
         break;
       }
-      default:
+      default: {
         push();
+      }
     }
   };
   const onChange = (key, value) => {
-    setData({ ...data, ...{ [key]: value } });
+    if (value && value.length && value.length > 0) {
+      setContent({ ...content, ...{ [key]: value[0] } });
+    }
+  };
+
+  const getJournalNext = (journal) => {
+    let nextKey = 'scoap3_journal';
+    if (journal.SCOAP3 === 'FULL') nextKey = 'goAhead';
+    else if (journal.SCOAP3 === 'NO') nextKey = 'cernAffiliation';
+    else if (journal.SCOAP3 === 'PARTIAL') nextKey = 'isHep';
+    return <NavButton variant="info" keyId={nextKey} title="Next" />;
+  };
+
+  const getAffiliationNext = (journal) => {
+    let nextKey = 'contactUs';
+    if (journal.Corresponding) {
+      if (journal.Non_corresponding) {
+        nextKey = 'goAhead';
+      } else nextKey = 'correspondingAuthor';
+    }
+    return <NavButton variant="info" keyId={nextKey} title="Yes" />;
+  };
+
+  const getCorrespondingAuthorNext = (journal) => {
+    let nextKey = 'EUFunding';
+    if (journal.Experiment) {
+      nextKey = 'experiment';
+    }
+    return <NavButton variant="info" keyId={nextKey} title="No" />;
   };
 
   return (
@@ -51,105 +114,136 @@ const WizardSection = () => {
             <Wizard onNext={skip}>
               <Steps>
                 <Step id="intro">
-                  <h1 className="text-align-center">Journal Name or ISSN</h1>
+                  <h1 className="text-align-center">Enter the journal name or ISSN:</h1>
                   <Form.Group>
                     <Typeahead
                       id="basic-typeahead-single"
-                      labelKey="name"
-                      onChange={(selected) => {
-                        onChange('journal', selected);
+                      size="lg"
+                      labelKey={(option) => {
+                        return `${option.Name} (${option.Short_Name}), Publisher: ${option.Publisher}, ISSN Online: ${option.ISSN_web}, ISSN Print: ${option.ISSN_print}`;
                       }}
-                      options={JOURNAL_OPTIONS}
-                      placeholder="Choose a journal..."
+                      onChange={(selected) => onChange('journal', selected)}
+                      options={journals}
+                      placeholder="Journal or ISSN"
                       clearButton
                     />
-                    {data &&
-                    data.journal &&
-                    data.journal.length > 0 &&
-                    JOURNAL_OPTIONS.indexOf(data.journal[0]) > -1 ? (
-                      <NavButton variant="info" keyId="scoap3_journal" title="Next" />
-                    ) : null}
+                    {content && content.journal ? getJournalNext(content.journal) : null}
 
                     <h6>-OR-</h6>
                     <NavButton variant="info" keyId="contactUs" title="Not in the list?" />
                   </Form.Group>
                 </Step>
                 <Step id="scoap3_journal">
-                  <h1 className="text-align-center">Journal is a SCOAP3 journal?</h1>
+                  <h1 className="wizard-text text-align-center">Journal is a SCOAP3 journal?</h1>
                   <div>
                     <NavButton variant="info" keyId="journalFullCover" title="Yes" />
                     <NavButton variant="info" keyId="cernAffiliation" title="No" />
                   </div>
                 </Step>
                 <Step id="journalFullCover">
-                  <h1 className="text-align-center">Is journal covered in full?</h1>
+                  <h1 className="wizard-text text-align-center">Is journal covered in full?</h1>
                   <div>
                     <NavButton variant="info" keyId="goAhead" title="Yes" />
                     <NavButton variant="info" keyId="isHep" title="No" />
                   </div>
                 </Step>
                 <Step id="isHep">
-                  <h1 className="text-align-center">Is article HEP?</h1>
+                  <h1 className="wizard-text text-align-center">
+                    Will your article be submitted to arXiv.org in one of the HEP categories
+                    (hep-ex, hep-lat, hep-ph, hep-th) before publication in the journal?
+                  </h1>
                   <div>
                     <NavButton variant="info" keyId="arxiv" title="Yes" />
                     <NavButton variant="info" keyId="cernAffiliation" title="No" />
                   </div>
                 </Step>
                 <Step id="arxiv">
-                  <h1 className="text-align-center">Remember to deposit in arXiv</h1>
+                  <h1 className="wizard-text text-align-center">Remember to deposit in arXiv</h1>
+                  <div>
+                    <NavButton variant="info" keyId="goAhead" title="Yes" />
+                  </div>
                 </Step>
                 <Step id="goAhead">
-                  <h1 className="text-align-center">Go ahead!</h1>
+                  <h1 className="wizard-text text-align-center">
+                    Your article will be automatically covered by one of the CERN Open Access
+                    agreements. You do not have to do anything special to benefit from the central
+                    CERN support.
+                  </h1>
                 </Step>
                 <Step id="cernAffiliation">
-                  <h1 className="text-align-center">Are you allowed to use CERN affiliation?</h1>
+                  <h1 className="wizard-text text-align-center">
+                    Are you a CERN staff member or fellow or allowed to use the CERN affiliation (
+                    <a href="https://scientific-info.cern/practical-information/glossary/cern-author">
+                      see here
+                    </a>
+                    )?
+                  </h1>
                   <div>
-                    <NavButton variant="info" keyId="corresponding" title="Yes" />
+                    {content && content.journal && getAffiliationNext(content.journal)}
                     <NavButton variant="info" keyId="contactUs" title="No" />
                   </div>
                 </Step>
                 <Step id="corresponding">
-                  <h1 className="text-align-center">Journal corresponding?</h1>
+                  <h1 className="wizard-text text-align-center">Journal corresponding?</h1>
                   <div>
                     <NavButton variant="info" keyId="nonCorresponding" title="Yes" />
                     <NavButton variant="info" keyId="contactUs" title="No" />
                   </div>
                 </Step>
                 <Step id="nonCorresponding">
-                  <h1 className="text-align-center">Journal non-corresponding?</h1>
+                  <h1 className="wizard-text text-align-center">Journal non-corresponding?</h1>
                   <div>
                     <NavButton variant="info" keyId="goAhead" title="Yes" />
                     <NavButton variant="info" keyId="correspondingAuthor" title="No" />
                   </div>
                 </Step>
                 <Step id="correspondingAuthor">
-                  <h1 className="text-align-center">Are you corresponding author?</h1>
+                  <h1 className="wizard-text text-align-center">
+                    Are you the corresponding author of this article (
+                    <a href="https://scientific-info.cern/practical-information/glossary/cern-author">
+                      see here
+                    </a>
+                    )?
+                  </h1>
                   <div>
                     <NavButton variant="info" keyId="goAhead" title="Yes" />
-                    <NavButton variant="info" keyId="experiment" title="No" />
+                    {content && content.journal && getCorrespondingAuthorNext(content.journal)}
                   </div>
                 </Step>
                 <Step id="experiment">
-                  <h1 className="text-align-center">Published on behalf of experiment?</h1>
+                  <h1 className="wizard-text text-align-center">
+                    Is this article published by or on behalf of an official CERN experiment?
+                  </h1>
                   <div>
                     <NavButton variant="info" keyId="goAhead" title="Yes" />
                     <NavButton variant="info" keyId="EUFunding" title="No" />
                   </div>
                 </Step>
                 <Step id="EUFunding">
-                  <h1 className="text-align-center">Do you benefit from EU funding?</h1>
+                  <h1 className="wizard-text text-align-center">
+                    Does any of the authors benefit from funding from the European Commission?
+                  </h1>
                   <div>
                     <NavButton variant="info" keyId="EUFundingResult" title="Yes" />
                     <NavButton variant="info" keyId="contactUs" title="No" />
                   </div>
                 </Step>
                 <Step id="EUFundingResult">
-                  <h1 className="text-align-center">
-                    Please use your EU grant to pay OA, if questions...
+                  <h1 className="wizard-text text-align-center">
+                    Articles resulting from an EC-funded project have to be published Open Access.
+                    The project budget might foresee a publication budget but not all articles are
+                    eligible according to the Horizon Europe rules. In case of questions, please
+                    contact us at{' '}
+                    <a href="mailto:open-access-questions@cern.ch">open-access-questions@cern.ch</a>
+                    .
                   </h1>
                 </Step>
                 <Step id="contactUs">
-                  <h1 className="text-align-center">Contact Us</h1>
+                  <h1 className="wizard-text text-align-center">
+                    Please reach out to us to get detailed advice on how to publish open access:{' '}
+                    <a href="mailto:open-access-questions@cern.ch">open-access-questions@cern.ch</a>
+                    .
+                  </h1>
                 </Step>
               </Steps>
               <Navigation />

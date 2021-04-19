@@ -8,9 +8,8 @@ const Navigation = ({ keyId, title = null }) => (
     render={(wizard) => {
       return (
         <Button
-          variant="info"
           size="lg"
-          style={{ fontSize: '3em', margin: '10px' }}
+          style={{ fontSize: '3em', margin: '10px', background: '#0d62b6' }}
           className="btn-fluidd"
           onClick={() => {
             if (keyId) {

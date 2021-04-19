@@ -1,7 +1,6 @@
 import React from 'react';
 // import React, { useEffect, useState } from 'react';
 import { Container } from 'react-bootstrap';
-import Title from '../Title/Title';
 import Wizard from './Wizard';
 
 const Projects = () => {
@@ -22,7 +21,6 @@ const Projects = () => {
     <section id="projects">
       <Container>
         <div className="project-wrapper">
-          <Title title="Follow the steps" />
           <Wizard />
         </div>
       </Container>

@@ -16,7 +16,7 @@
 ⚡️ Easy site customization\
 ⚡️ Well organized documentation
 
-To view it live, **[click here](https://scientific-info.cern/cern-authors/)**
+To view it live, **[click here](https://scientific-info.cern/cern-author-guide)**
 
 ---
 

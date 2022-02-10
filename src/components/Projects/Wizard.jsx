@@ -34,6 +34,7 @@ const WizardSection = () => {
         allJournalListAuthorToolXlsxSheet1 {
           nodes {
             Corresponding
+            High_Cost
             id
             Short_Name
             SCOAP3
@@ -95,7 +96,11 @@ const WizardSection = () => {
     let nextKey = 'contactUs';
     if (journal.Corresponding) {
       if (journal.Non_corresponding) {
-        nextKey = 'goAhead';
+        if (journal.High_Cost) {
+          nextKey = 'contactUs13';
+        } else {
+          nextKey = 'contactUs11';
+        }
       } else nextKey = 'correspondingAuthor';
     }
     return <NavButton variant="info" keyId={nextKey} title="Yes" />;
@@ -182,7 +187,8 @@ const WizardSection = () => {
                 </Step>
                 <Step id="cernAffiliation">
                   <h1 className="wizard-text text-align-center">
-                    Are you a CERN staff member or fellow or allowed to use the CERN affiliation (
+                    Is there in the author list any CERN staff member or fellow or anyone allowed to
+                    use the CERN affiliation (
                     <a
                       target="_blank"
                       href="https://scientific-info.cern/practical-information/glossary/cern-author"
@@ -194,7 +200,7 @@ const WizardSection = () => {
                   </h1>
                   <div>
                     {content && content.journal && getAffiliationNext(content.journal)}
-                    <NavButton variant="info" keyId="contactUs" title="No" />
+                    <NavButton variant="info" keyId="contactUs12" title="No" />
                   </div>
                 </Step>
                 <Step id="corresponding">
@@ -213,7 +219,8 @@ const WizardSection = () => {
                 </Step>
                 <Step id="correspondingAuthor">
                   <h1 className="wizard-text text-align-center">
-                    Are you the corresponding author of this article (
+                    Is the corresponding author of this article a CERN staff member or fellow or
+                    allowed to use the CERN affiliation (
                     <a href="https://scientific-info.cern/practical-information/glossary/cern-author">
                       see here
                     </a>
@@ -239,7 +246,7 @@ const WizardSection = () => {
                   </h1>
                   <div>
                     <NavButton variant="info" keyId="EUFundingResult" title="Yes" />
-                    <NavButton variant="info" keyId="contactUs" title="No" />
+                    <NavButton variant="info" keyId="contactUs11" title="No" />
                   </div>
                 </Step>
                 <Step id="EUFundingResult">
@@ -255,6 +262,33 @@ const WizardSection = () => {
                 <Step id="contactUs">
                   <h1 className="wizard-text text-align-center">
                     Please reach out to us to get detailed advice on how to publish open access:{' '}
+                    <a href="mailto:open-access-questions@cern.ch">open-access-questions@cern.ch</a>
+                    .
+                  </h1>
+                </Step>
+                <Step id="contactUs12">
+                  <h1 className="wizard-text text-align-center">
+                    Your article is most likely not eligible for CERN central funding, but please
+                    reach out to us to get detailed advice on how to publish open access:{' '}
+                    <a href="mailto:open-access-questions@cern.ch">open-access-questions@cern.ch</a>
+                    .
+                  </h1>
+                </Step>
+                <Step id="contactUs11">
+                  <h1 className="wizard-text text-align-center">
+                    Your article is eligible to be covered by the CERN central fund under certain
+                    conditions. Please reach out to us in advance of the submission to confirm your
+                    eligibility:{' '}
+                    <a href="mailto:open-access-questions@cern.ch">open-access-questions@cern.ch</a>
+                    .
+                  </h1>
+                </Step>
+                <Step id="contactUs13">
+                  <h1 className="wizard-text text-align-center">
+                    Your article is eligible to be covered by the CERN central fund, but given the
+                    high-cost of the APCs for the selected journal, your article needs to be
+                    approved by the Director of Computing and Research. Please reach out to us in
+                    advance of the submission:{' '}
                     <a href="mailto:open-access-questions@cern.ch">open-access-questions@cern.ch</a>
                     .
                   </h1>

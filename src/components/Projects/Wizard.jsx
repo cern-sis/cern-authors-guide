@@ -96,12 +96,14 @@ const WizardSection = () => {
     let nextKey = 'contactUs';
     if (journal.Corresponding) {
       if (journal.Non_corresponding) {
-        if (journal.High_Cost) {
-          nextKey = 'contactUs13';
-        } else {
-          nextKey = 'contactUs11';
-        }
+        nextKey = 'goAhead';
       } else nextKey = 'correspondingAuthor';
+    } else if (!journal.Corresponding) {
+      if (journal.High_Cost) {
+        nextKey = 'contactUs13';
+      } else {
+        nextKey = 'contactUs11';
+      }
     }
     return <NavButton variant="info" keyId={nextKey} title="Yes" />;
   };

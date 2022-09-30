@@ -21,19 +21,8 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
 
-      - name: Setup node
-        uses: actions/setup-node@v3
+      - name: Build and deploy gatsby
+        uses: enriikke/gatsby-gh-pages-action@v2
         with:
-          node-version: 10.14.0
-          cache: npm
-
-      - name: Install dependencies
-        run: npm install
-
-      - name: Build gatsby
-        run: gatsby build --prefix-paths
-
-      - name: Deploy 🚀
-        uses: JamesIves/github-pages-deploy-action@v4
-        with:
-          folder: public
+          access-token: ${{ secrets.GITHUB_TOKEN }}
+          gatsby-args: --prefix-paths

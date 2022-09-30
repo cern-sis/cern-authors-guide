@@ -61,6 +61,8 @@ public
 # Mac files
 .DS_Store
 
+.python-version
+
 # Yarn
 yarn-error.log
 .pnp/

@@ -5,7 +5,12 @@
   <br>
 </h2>
 
-## Features
+## Deploy
+
+``` bash
+yarn install
+yarn run deploy
+```
 
 ⚡️ Modern UI Design + Reveal Animations\
 ⚡️ One Page Layout built with React\

@@ -26,3 +26,4 @@ jobs:
         with:
           access-token: ${{ secrets.GITHUB_TOKEN }}
           gatsby-args: --prefix-paths
+          deploy-branch: gh-pages

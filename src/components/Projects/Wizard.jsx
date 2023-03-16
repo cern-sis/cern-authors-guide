@@ -89,7 +89,7 @@ const WizardSection = () => {
     if (journal.SCOAP3 === 'FULL') nextKey = 'goAhead';
     else if (journal.SCOAP3 === 'NO') nextKey = 'cernAffiliation';
     else if (journal.SCOAP3 === 'PARTIAL') nextKey = 'isHep';
-    return <NavButton variant="info" keyId={nextKey} title="Next" />;
+    return <NavButton variant="info" keyId={nextKey} title="No" />;
   };
 
   const getAffiliationNext = (journal) => {
@@ -141,7 +141,7 @@ const WizardSection = () => {
                       placeholder="Journal or ISSN"
                       clearButton
                     />
-                    {content && content.journal ? getJournalNext(content.journal) : null}
+                    <NavButton variant="info" keyId="is_conference" title="Next" />
 
                     <h6>-OR-</h6>
                     <NavButton variant="info" keyId="contactUs" title="Not in the list?" />
@@ -152,6 +152,15 @@ const WizardSection = () => {
                   <div>
                     <NavButton variant="info" keyId="journalFullCover" title="Yes" />
                     <NavButton variant="info" keyId="cernAffiliation" title="No" />
+                  </div>
+                </Step>
+                <Step id="is_conference">
+                  <h1 className="wizard-text text-align-center">
+                    Is the paper that you plan to submit a conference paper?
+                  </h1>
+                  <div>
+                    <NavButton variant="info" keyId="contactUs14" title="Yes" />
+                    {content && content.journal ? getJournalNext(content.journal) : null}
                   </div>
                 </Step>
                 <Step id="journalFullCover">
@@ -291,6 +300,19 @@ const WizardSection = () => {
                     high-cost of the APCs for the selected journal, your article needs to be
                     approved by the Director of Computing and Research. Please reach out to us in
                     advance of the submission:{' '}
+                    <a href="mailto:open-access-questions@cern.ch">open-access-questions@cern.ch</a>
+                    .
+                  </h1>
+                </Step>
+                <Step id="contactUs14">
+                  <h1 className="wizard-text text-align-center">
+                    The CERN Open Access policy does not cover conference proceedings. So the Open
+                    Access fees cannot be covered centrally for this paper. If you want to publish
+                    it in Open Access, you need to identify other funds. Otherwise, we suggest you
+                    to publish it under the subscription model, and have the preprint made available
+                    on CDS. Please note that we have exceptions for papers published in special
+                    issues with selected and peer-reviewed conference contributions. if it is the
+                    case, please contact us:{' '}
                     <a href="mailto:open-access-questions@cern.ch">open-access-questions@cern.ch</a>
                     .
                   </h1>

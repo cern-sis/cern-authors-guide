@@ -87,9 +87,9 @@ const WizardSection = () => {
   const getJournalNext = (journal) => {
     let nextKey = 'scoap3_journal';
     if (journal.SCOAP3 === 'FULL') nextKey = 'goAhead';
-    else if (journal.SCOAP3 === 'NO') nextKey = 'cernAffiliation';
+    else if (journal.SCOAP3 === 'NO') nextKey = 'is_conference';
     else if (journal.SCOAP3 === 'PARTIAL') nextKey = 'isHep';
-    return <NavButton variant="info" keyId={nextKey} title="No" />;
+    return <NavButton variant="info" keyId={nextKey} title="Next" />;
   };
 
   const getAffiliationNext = (journal) => {
@@ -141,7 +141,7 @@ const WizardSection = () => {
                       placeholder="Journal or ISSN"
                       clearButton
                     />
-                    <NavButton variant="info" keyId="is_conference" title="Next" />
+                    {content && content.journal ? getJournalNext(content.journal) : null}
 
                     <h6>-OR-</h6>
                     <NavButton variant="info" keyId="contactUs" title="Not in the list?" />
@@ -160,7 +160,7 @@ const WizardSection = () => {
                   </h1>
                   <div>
                     <NavButton variant="info" keyId="contactUs14" title="Yes" />
-                    {content && content.journal ? getJournalNext(content.journal) : null}
+                    <NavButton variant="info" keyId="cernAffiliation" title="No" />
                   </div>
                 </Step>
                 <Step id="journalFullCover">
@@ -307,12 +307,17 @@ const WizardSection = () => {
                 <Step id="contactUs14">
                   <h1 className="wizard-text text-align-center">
                     The CERN Open Access policy does not cover conference proceedings. So the Open
-                    Access fees cannot be covered centrally for this paper. If you want to publish
-                    it in Open Access, you need to identify other funds. Otherwise, we suggest you
-                    to publish it under the subscription model, and have the preprint made available
-                    on CDS. Please note that we have exceptions for papers published in special
-                    issues with selected and peer-reviewed conference contributions. if it is the
-                    case, please contact us:{' '}
+                    Access fees cannot be covered centrally for this paper.
+                  </h1>
+                  <h1 className="wizard-text text-align-center">
+                    If you want to publish it in Open Access, you need to identify other funds.
+                    Otherwise, we suggest you to publish it under the subscription model, and have
+                    the preprint made available on CDS.
+                  </h1>
+                  <h1 className="wizard-text text-align-center">
+                    Please note that we have exceptions for papers published in special issues with
+                    selected and peer-reviewed conference contributions. if it is the case, please
+                    contact us:{' '}
                     <a href="mailto:open-access-questions@cern.ch">open-access-questions@cern.ch</a>
                     .
                   </h1>

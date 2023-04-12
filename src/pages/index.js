@@ -15,6 +15,7 @@ export default () => {
         <title>{title || 'CERN Authors Guide'}</title>
         <html lang={lang || 'en'} />
         <meta name="description" content={description || 'CERN Authors Guide'} />
+        <meta name="x-description" content="cern authors guide" />
       </Helmet>
       <App />
     </>

@@ -26,6 +26,7 @@
     "gatsby-source-filesystem": "^2.3.12",
     "gatsby-transformer-excel": "^3.3.0",
     "gatsby-transformer-sharp": "^2.5.5",
+    "gh-pages": "^5.0.0",
     "nanoid": "^3.1.10",
     "prop-types": "^15.7.2",
     "react": "^16.13.1",

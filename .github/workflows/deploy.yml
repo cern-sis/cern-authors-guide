@@ -1,57 +1,75 @@
-name: Build and Deploy
+name: Deploy Gatsby site to Pages
 
 on:
   push:
-    branches: [master]
+    branches: ['master']
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: 'pages'
+  cancel-in-progress: false
 
 defaults:
   run:
     shell: bash
 
 jobs:
-  build-and-deploy:
-    runs-on:
-      ubuntu-latest
-
-    permissions:
-      pages: write
-      id-token: write
-
-    # Deploy to the github-pages environment
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
+  build:
+    runs-on: ubuntu-latest
 
     steps:
       - name: Checkout
         uses: actions/checkout@v3
 
-      - name: Configure git
-        run: |
-          git config user.name github-actions
-          git config user.email github-actions@github.com
-
-      - name: Setup node
+      - name: Setup Node
         uses: actions/setup-node@v3
         with:
           node-version: 16.16.0
-          cache: npm
+          cache: yarn
 
-      - uses: actions/setup-python@v4
+      - name: Setup Pages
+        id: pages
+        uses: actions/configure-pages@v3
         with:
-          python-version: '3.8'
+          static_site_generator: gatsby
+
+      - name: Restore cache
+        uses: actions/cache@v3
+        with:
+          path: |
+            public
+            .cache
+          key: ${{ runner.os }}-gatsby-build-${{ hashFiles('public') }}
+          restore-keys: |
+            ${{ runner.os }}-gatsby-build-
 
       - name: Install dependencies
         run: |
           npm install -g gatsby-cli
           yarn install
 
-      - name: Build
-        run: |
-          yarn run build
+      - name: Build with Gatsby
+        env:
+          PREFIX_PATHS: 'true'
+        run: yarn run build
 
-      - name: Deploy
-        uses: peaceiris/actions-gh-pages@v3
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v1
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./public
+          path: ./public
+
+  deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    needs: build
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v2

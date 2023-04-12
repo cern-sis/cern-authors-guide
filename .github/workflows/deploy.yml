@@ -36,7 +36,13 @@ jobs:
           yarn install
 
       - name: Deploy
-        run: yarn run deploy
+        run: yarn run build
+
+      - name: Deploy
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./public
 
       - uses: butlerlogic/action-autotag@1.0.0
         with:

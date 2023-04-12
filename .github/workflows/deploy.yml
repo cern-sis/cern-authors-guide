@@ -18,12 +18,12 @@ jobs:
       - name: Setup node
         uses: actions/setup-node@v3
         with:
-          node-version: 10.17.0
+          node-version: 16.16.0
           cache: npm
 
       - uses: actions/setup-python@v4
         with:
-          python-version: 'pypy2.7'
+          python-version: '3.8'
 
       - name: Install dependencies
         run: |

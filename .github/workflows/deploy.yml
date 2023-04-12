@@ -45,10 +45,6 @@ jobs:
 
       - name: Create a GitHub release
         uses: ncipollo/release-action@v1
-        with:
-          tag: ${{ steps.tag_version.outputs.new_tag }}
-          name: Release ${{ steps.tag_version.outputs.new_tag }}
-          body: ${{ steps.tag_version.outputs.changelog }}
 
       - name: Deploy gh pages
         uses: peaceiris/actions-gh-pages@v3

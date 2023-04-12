@@ -7,10 +7,7 @@
 
 ## Deploy
 
-``` bash
-yarn install
-yarn run deploy
-```
+Deployment is happening automatically when a commit is pushed on `master` branch.
 
 To view it live, **[click here](https://scientific-info.cern/cern-author-guide)**
 
@@ -26,9 +23,8 @@ You'll need [Git](https://git-scm.com) and [Node.js](https://nodejs.org/en/downl
 Also you need to have installed [Gatsby CLI](https://www.gatsbyjs.org/docs/quick-start/)
 
 ```
-node@v10.16.0 or higher
-npm@6.9.0 or higher
-git@2.17.1 or higher
+node@v16.16.0 or higher
+npm@8.18.0 or higher
 gatsby-cli@2.8.22 or higher
 ```
 

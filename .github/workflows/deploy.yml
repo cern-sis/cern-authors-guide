@@ -10,7 +10,18 @@ defaults:
 
 jobs:
   build-and-deploy:
-    runs-on: ubuntu-latest
+    runs-on:
+      ubuntu-latest
+
+    permissions:
+      pages: write
+      id-token: write
+
+    # Deploy to the github-pages environment
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -35,11 +46,12 @@ jobs:
           npm install -g gatsby-cli
           yarn install
 
-      - name: Build and deploy
+      - name: Build
         run: |
-          yarn run deploy
+          yarn run build
 
-      - name: Bump version and push tag
-        uses: mathieudutour/github-tag-action@v6.1
+      - name: Deploy
+        uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./public

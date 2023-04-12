@@ -35,16 +35,23 @@ jobs:
           npm install -g gatsby-cli
           yarn install
 
-      - name: Deploy
+      - name: Build
         run: yarn run build
 
-      - name: Deploy
+      - name: Bump version and push tag
+        uses: mathieudutour/github-tag-action@v6.1
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Create a GitHub release
+        uses: ncipollo/release-action@v1
+        with:
+          tag: ${{ steps.tag_version.outputs.new_tag }}
+          name: Release ${{ steps.tag_version.outputs.new_tag }}
+          body: ${{ steps.tag_version.outputs.changelog }}
+
+      - name: Deploy gh pages
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./public
-
-      - uses: butlerlogic/action-autotag@1.0.0
-        with:
-          GITHUB_TOKEN: '${{ secrets.GITHUB_TOKEN }}'
-          tag_message: 'Deploy.'

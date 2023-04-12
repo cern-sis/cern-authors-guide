@@ -21,9 +21,9 @@ jobs:
           node-version: 10.14.0
           cache: npm
 
-      - uses: actions/setup-python@v4
-        with:
-          python-version: 'pypy2.7'
+#       - uses: actions/setup-python@v4
+#         with:
+#           python-version: 'pypy2.7'
 
       - name: Install dependencies
         run: |

@@ -296,10 +296,11 @@ const WizardSection = () => {
                 </Step>
                 <Step id="contactUs13">
                   <h1 className="wizard-text text-align-center">
-                    Your article is eligible to be covered by the CERN central fund, but given the
-                    high-cost of the APCs for the selected journal, your article needs to be
-                    approved by the Director of Computing and Research. Please reach out to us in
-                    advance of the submission:{' '}
+                    Your article is not eligible to be covered by the CERN central fund given the high-cost of the APCs for the selected journal.
+                    
+                    If you decide to submit the paper to the journal, it needs to be published in Open Access, to be compliant with the CERN Open Access policy, and you need therefore to ensure an alternative source of funding.
+
+                    Please reach out to us if you need additional information:{' '}
                     <a href="mailto:open-access-questions@cern.ch">open-access-questions@cern.ch</a>
                     .
                   </h1>

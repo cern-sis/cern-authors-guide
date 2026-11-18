@@ -11,6 +11,8 @@ Deployment is happening automatically when a commit is pushed on `master` branch
 
 To view it live, **[click here](https://scientific-info.cern/cern-author-guide)**
 
+To replace `src/data/journal_list_author_tool.xlsx` from the Actions tab, run **Deploy Gatsby site to Pages** on `master` and provide a direct HTTPS download URL in the optional **journal_list_url** field. The workflow validates the XLSX, commits the replacement to `master`, and deploys it as part of that run. Leave the field blank for a regular deployment. The repository must allow GitHub Actions to write contents.
+
 ---
 
 ## Getting Started 🚀
